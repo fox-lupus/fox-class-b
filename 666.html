@@ -1,0 +1,149 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: https://mozilla.github.io/nunjucks/ -->
+<!-- pug: https://pugjs.org/ -->
+<!-- haml: http://haml.info/ -->
+<!-- hbs(handlebars): http://handlebarsjs.com/ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Welcome to Glitch!</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="665.css">
+    
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/client.js" defer></script>
+  </head>
+  <body>
+  <script type="module">
+function d(sides) {
+  return 1 + Math.floor(Math.random() * sides);
+}
+
+(function () {
+  // Let's make a game!
+  var header = {
+    name: "small adventure",
+    by: "Hallie Larsson and Johnicholas Hines",
+    version: "1", 
+    created_on: "2018/9/1",
+    last_updated_on: "2018/9/1"
+  };
+  var settings = {
+    identifier: "small_adventure",
+    // tick_period_ms: 100 // uncomment this for faster-paced gameplay
+  };
+  var game = new Game(header, settings);
+
+  // let's see.
+  // if you remember the space freighter
+  // we modeled leaving as zeroing and re-rolling
+  // so if we zero monsters nearby and give a monster?
+  
+  game.newResource("keys");
+  game.newResource("water")
+    .startsAt(30)
+    .maxCapacity(50);
+  game.newResource("hearts")
+    .startsAt(10);
+  game.newResource("mana");
+  game.newResource("monsters_nearby");
+  
+  function enter() {
+    game.bundle.monsters_nearby = d(6);
+  }
+  
+  var map = game.newStateMachine("map");
+  
+  // exits from room a
+  var room_a = map.newState("a")
+    .displayAs("room bed")
+    .isStartState();
+  room_a.newExit("b")
+    .displayAs("go to bed room ")
+    .onClick(enter);
+  room_a.newExit("c")
+    .displayAs("go to room callcenter")
+    .onClick(enter);
+
+  // exits from room b
+  var room_b = map.newState("b")
+    .displayAs(" bed romm");
+  room_b.newExit("a")
+    .displayAs("go to room a")
+    .onClick(enter);
+
+  var room_c = map.newState("c")
+    .displayAs("room callvanter");
+
+  // clickables
+  game.newClickable("drink_from_fountain")
+    .requires('map==="a"')
+    .gives(10, "water");
+  game.newClickable("fight")
+    .takes(1, "monsters_nearby");
+  
+  game.newUpgrade("sword")
+    .requires('map==="b"')
+    .takes(10, "fish_in_inventory")
+    .setDescription("In room b, you can buy a sword for 10 fish.");
+  // water decreases at 1 per tick
+  game.newBuilding("thirst")
+    .startsAt(1)
+    .isAbstract()
+    .takes(1, "water");
+  // hearts decreases at 1 per tick, if you have no water
+  game.newBuilding("starvation")
+    .startsAt(1)
+    .isAbstract()
+    .takes(1, "hearts")
+    .requires('water===0');
+  
+  game.newBuilding("monsters_attack")
+    .startsAt(1)
+    .isAbstract()
+    .takes(1, "hearts")
+    .requires('monsters_nearby>0');
+  
+  // what next?  
+  var done = false;
+  game.newAchievement("dead")
+    .requires("hearts===0")
+    .onUnlock(function () {
+      console.log("you died!");
+      done = true;
+    });
+  
+  function tick(absolute_ms) {
+    game.update(absolute_ms);
+    if (!done) {
+      requestAnimationFrame(tick);
+    }
+  }
+  document.getElementById("run").addEventListener("click", function () {
+    game.start();
+    console.log(game);
+    done = false;
+    requestAnimationFrame(tick);
+  });
+  //document.getElementById("show").addEventListener("click", function () {
+  //  console.log(JSON.stringify(game.elements.map.definition));
+  //});
+})();
+</script>
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+    <script src="https://button.glitch.me/button.js"></script>
+
+  </body>
+</html>
