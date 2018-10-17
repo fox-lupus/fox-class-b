@@ -24,7 +24,21 @@
     <script src="/client.js" defer></script>
   </head>
   <body>
-  <script type="module">
+  <!-- saved from url=(0052)https://baxter-intro-design.glitch.me/baxter_cs.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Starter project</title>
+<!-- type=module changes this to not stab things into the globals, and only export things that are explicitly exported. It's an ES6 thing, I guess? -->
+<script src="./help_files/game.js.download" type="module"></script>
+</head><body>
+<div id="small_adventure">
+<div class="resources"><div data-identifier="keys" style="display: block;">0 keys<br></div><div data-identifier="water" style="display: block;">0 water<br></div><div data-identifier="hearts" style="display: block;">1 hearts<br></div><div data-identifier="mana" style="display: block;">0 mana<br></div><div data-identifier="monsters_nearby" style="display: block;">0 monsters_nearby<br></div></div><div class="state_machines"><div data-identifier="map" style="display: block;">room a<br><button data-identifier="map" data-which="0">go to room b</button><button data-identifier="map" data-which="1">go to room c</button></div></div><div class="clickables"><div data-identifier="drink_from_fountain" style="display: block;"><button data-identifier="drink_from_fountain" data-which="click">drink_from_fountain</button></div><div data-identifier="fight" style="display: block;"><button data-identifier="fight" data-which="click" disabled="">fight</button></div></div><div class="upgrades"><div data-identifier="sword" title="In room b, you can buy a sword for 10 fish." style="display: block;">sword?<br><button data-identifier="sword" data-which="buy" disabled="">buy</button></div></div><div class="achievements"><div data-identifier="dead" style="display: block;">dead<br></div></div></div>
+<div class="backrond">
+<button id="run">
+  Run
+</button>
+<script type="module">
+import Game from "./js/game.js";
+  
 function d(sides) {
   return 1 + Math.floor(Math.random() * sides);
 }
@@ -51,8 +65,8 @@ function d(sides) {
   
   game.newResource("keys");
   game.newResource("water")
-    .startsAt(30)
-    .maxCapacity(50);
+    .startsAt(3)
+    .maxCapacity(20);
   game.newResource("hearts")
     .startsAt(10);
   game.newResource("mana");
@@ -66,29 +80,29 @@ function d(sides) {
   
   // exits from room a
   var room_a = map.newState("a")
-    .displayAs("room bed")
+    .displayAs("room a")
     .isStartState();
   room_a.newExit("b")
-    .displayAs("go to bed room ")
+    .displayAs("go to room b")
     .onClick(enter);
   room_a.newExit("c")
-    .displayAs("go to room callcenter")
+    .displayAs("go to room c")
     .onClick(enter);
 
   // exits from room b
   var room_b = map.newState("b")
-    .displayAs(" bed romm");
+    .displayAs("room b");
   room_b.newExit("a")
     .displayAs("go to room a")
     .onClick(enter);
 
   var room_c = map.newState("c")
-    .displayAs("room callvanter");
+    .displayAs("room c");
 
   // clickables
   game.newClickable("drink_from_fountain")
     .requires('map==="a"')
-    .gives(10, "water");
+    .gives(5, "water");
   game.newClickable("fight")
     .takes(1, "monsters_nearby");
   
@@ -140,10 +154,6 @@ function d(sides) {
   //});
 })();
 </script>
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js"></script>
+</div>
 
-  </body>
-</html>
+</body></html>

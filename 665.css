@@ -5,7 +5,8 @@
 body {
   font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
   margin: 2em;
-   background: url(https://kids.nationalgeographic.com/content/dam/kids/photos/animals/Mammals/H-P/pig-full-body.adapt.945.1.jpg);
+   background: url(https://img00.deviantart.net/98d1/i/2009/273/5/e/schools_basement_i_by_chibi_banane.jpg
+    );
 }
 
 h1 {
@@ -66,4 +67,8 @@ footer {
   margin-top: 50px;
   padding-top: 25px;
   border-top: 1px solid lightgrey;
+}
+.backrond
+{
+background-color: #E8E8E8;
 }
